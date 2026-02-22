@@ -1,16 +1,63 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lotto Number Recommender</title>
+  <title>🍀 로또 번호 추천기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link href='/style.css' rel='stylesheet'>
 </head>
 <body>
-  <button id="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
-  <h1>Lotto Number Recommender</h1>
-  <button onclick="recommendLottoNumbers()">Recommend Lotto Numbers</button>
-  <div id="lotto-numbers"></div>
+
+  <!-- 테마 토글 -->
+  <button id="theme-toggle" onclick="toggleTheme()">🌙 다크모드</button>
+
+  <!-- 헤더 -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">🍀 <span>LUCKY LOTTO</span></div>
+      <p class="subtitle">AI 기반 행운의 번호 추천 서비스</p>
+    </div>
+    <div class="header-deco">
+      <span class="ball-deco b1">7</span>
+      <span class="ball-deco b2">13</span>
+      <span class="ball-deco b3">27</span>
+      <span class="ball-deco b4">38</span>
+      <span class="ball-deco b5">42</span>
+    </div>
+  </header>
+
+  <!-- 메인 -->
+  <main class="container">
+
+    <section class="info-banner">
+      <div class="info-item">🎱 <strong>1~45</strong> 번호</div>
+      <div class="info-item">🎯 <strong>5게임</strong> 자동 추천</div>
+      <div class="info-item">⭐ <strong>보너스</strong> 번호 포함</div>
+    </section>
+
+    <div class="generate-wrap">
+      <button class="generate-btn" onclick="generateAll()">
+        <span class="btn-icon">🎰</span>
+        <span class="btn-text">번호 추천받기</span>
+      </button>
+    </div>
+
+    <div id="results" class="results-grid"></div>
+
+    <section class="notice">
+      <p>⚠️ 본 서비스는 재미를 위한 무작위 번호 생성 서비스입니다. 당첨을 보장하지 않습니다.</p>
+    </section>
+
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="site-footer">
+    <p>© 2026 Lucky Lotto · 행운을 빕니다 🍀</p>
+  </footer>
+
   <script defer type="text/javascript" src="/main.js"></script>
 </body>
 </html>
