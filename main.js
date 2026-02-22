@@ -1,3 +1,37 @@
+/* ===== 제휴 문의 폼 ===== */
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const btn = form.querySelector('.submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>전송 중...</span>';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+
+      if (res.ok) {
+        form.classList.add('hidden');
+        document.getElementById('form-success').classList.remove('hidden');
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="submit-icon">🚀</span><span>문의 보내기</span>';
+        alert('전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.innerHTML = '<span class="submit-icon">🚀</span><span>문의 보내기</span>';
+      alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  });
+});
+
 /* ===== 테마 ===== */
 function toggleTheme() {
   const body = document.body;

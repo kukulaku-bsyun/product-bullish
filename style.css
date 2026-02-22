@@ -386,6 +386,134 @@ body {
   color: var(--bonus-border);
 }
 
+/* ===== 제휴 문의 섹션 ===== */
+.contact-section {
+  margin-top: 56px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 36px 32px;
+  box-shadow: var(--card-shadow);
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.contact-badge {
+  display: inline-block;
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 4px 14px;
+  border-radius: 50px;
+  border: 1px solid var(--accent);
+  margin-bottom: 12px;
+}
+.contact-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.contact-desc {
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+/* 폼 레이아웃 */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-sub);
+}
+.required { color: #ef4444; margin-left: 2px; }
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  background: var(--surface2);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: none;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--text-sub); opacity: 0.6; }
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238890b5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+/* 전송 버튼 */
+.submit-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  background: var(--btn-bg);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 18px var(--btn-shadow);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--btn-shadow); }
+.submit-btn:active { transform: translateY(0); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.submit-icon { font-size: 18px; }
+
+/* 성공 메시지 */
+.form-success {
+  text-align: center;
+  padding: 32px 16px;
+}
+.form-success .success-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+.form-success p { font-size: 15px; color: var(--text-sub); line-height: 1.8; }
+.hidden { display: none !important; }
+
+@media (max-width: 520px) {
+  .form-row { grid-template-columns: 1fr; }
+  .contact-section { padding: 24px 18px; }
+}
+
 /* ===== 공지 ===== */
 .notice {
   margin-top: 36px;
