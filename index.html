@@ -3,105 +3,213 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🍀 로또 번호 추천기</title>
+  <title>🐾 동물상 테스트 | 나는 강아지상? 고양이상?</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <link href='/style.css' rel='stylesheet'>
+  <link href="/style.css" rel="stylesheet">
 </head>
 <body>
 
-  <!-- 테마 토글 -->
   <button id="theme-toggle" onclick="toggleTheme()">🌙 다크모드</button>
 
   <!-- 헤더 -->
   <header class="site-header">
     <div class="header-inner">
-      <div class="logo">🍀 <span>LUCKY LOTTO</span></div>
-      <p class="subtitle">AI 기반 행운의 번호 추천 서비스</p>
+      <div class="logo">🐾 동물상 테스트</div>
+      <p class="subtitle">AI가 분석하는 나의 동물상 · 강아지상 vs 고양이상</p>
     </div>
     <div class="header-deco">
-      <span class="ball-deco b1">7</span>
-      <span class="ball-deco b2">13</span>
-      <span class="ball-deco b3">27</span>
-      <span class="ball-deco b4">38</span>
-      <span class="ball-deco b5">42</span>
+      <span class="hdeco">🐶</span>
+      <span class="hdeco">🐱</span>
+      <span class="hdeco">🐾</span>
+      <span class="hdeco">✨</span>
     </div>
   </header>
 
-  <!-- 메인 -->
   <main class="container">
 
-    <section class="info-banner">
-      <div class="info-item">🎱 <strong>1~45</strong> 번호</div>
-      <div class="info-item">🎯 <strong>5게임</strong> 자동 추천</div>
-      <div class="info-item">⭐ <strong>보너스</strong> 번호 포함</div>
-    </section>
-
-    <div class="generate-wrap">
-      <button class="generate-btn" onclick="generateAll()">
-        <span class="btn-icon">🎰</span>
-        <span class="btn-text">번호 추천받기</span>
-      </button>
-    </div>
-
-    <div id="results" class="results-grid"></div>
-
-    <section class="notice">
-      <p>⚠️ 본 서비스는 재미를 위한 무작위 번호 생성 서비스입니다. 당첨을 보장하지 않습니다.</p>
-    </section>
-
-    <!-- 제휴 문의 폼 -->
-    <section class="contact-section">
-      <div class="contact-header">
-        <span class="contact-badge">📬 PARTNERSHIP</span>
-        <h2 class="contact-title">제휴 문의</h2>
-        <p class="contact-desc">광고·제휴·협력 제안을 남겨주시면 빠르게 답변드립니다.</p>
+    <!-- ① 시작 화면 -->
+    <section id="screen-start" class="screen active">
+      <div class="start-card">
+        <div class="start-vs">
+          <div class="vs-item dog-side">
+            <span class="vs-emoji">🐶</span>
+            <span class="vs-label">강아지상</span>
+          </div>
+          <div class="vs-divider">VS</div>
+          <div class="vs-item cat-side">
+            <span class="vs-emoji">🐱</span>
+            <span class="vs-label">고양이상</span>
+          </div>
+        </div>
+        <p class="start-desc">
+          AI가 당신의 사진을 분석해<br>
+          <strong>강아지상인지 고양이상인지</strong> 알아볼게요!
+        </p>
+        <div class="start-btns">
+          <button class="mode-btn dog-btn" onclick="showScreen('screen-upload')">
+            <span>📷</span> 사진으로 테스트
+          </button>
+          <button class="mode-btn cat-btn" onclick="initWebcam()">
+            <span>📹</span> 웹캠으로 테스트
+          </button>
+        </div>
+        <p class="start-notice">※ 재미를 위한 테스트로 정확한 분석 결과가 아닙니다.</p>
       </div>
+    </section>
 
-      <form id="contact-form" action="https://formspree.io/f/mojnkzvy" method="POST" novalidate>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">이름 / 회사명 <span class="required">*</span></label>
-            <input type="text" id="name" name="name" placeholder="홍길동 / (주)럭키컴퍼니" required />
+    <!-- ② 사진 업로드 화면 -->
+    <section id="screen-upload" class="screen">
+      <div class="upload-card">
+        <h2>📷 사진 업로드</h2>
+        <p class="upload-desc">얼굴이 잘 보이는 정면 사진을 올려주세요</p>
+        <label class="drop-zone" id="drop-zone">
+          <div id="drop-placeholder">
+            <span class="drop-icon">🖼️</span>
+            <p>클릭하거나 사진을 끌어다 놓으세요</p>
+            <span class="drop-sub">JPG, PNG, WEBP 지원</span>
           </div>
-          <div class="form-group">
-            <label for="email">이메일 <span class="required">*</span></label>
-            <input type="email" id="email" name="email" placeholder="example@company.com" required />
+          <img id="preview-img" class="hidden" alt="미리보기" />
+          <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)" />
+        </label>
+        <div class="upload-actions">
+          <button class="action-btn secondary" onclick="showScreen('screen-start')">← 돌아가기</button>
+          <button class="action-btn primary" id="analyze-btn" onclick="analyzeImage()" disabled>
+            🔍 분석 시작
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ 웹캠 화면 -->
+    <section id="screen-webcam" class="screen">
+      <div class="webcam-card">
+        <h2>📹 실시간 분석</h2>
+        <p class="upload-desc">카메라를 얼굴 정면에 맞춰주세요</p>
+        <div id="webcam-container" class="webcam-box"></div>
+        <div class="live-bars" id="live-bars">
+          <div class="live-bar-row">
+            <span class="lbar-label">🐶 강아지상</span>
+            <div class="lbar-track"><div class="lbar-fill dog-fill" id="bar-dog"></div></div>
+            <span class="lbar-pct" id="pct-dog">0%</span>
+          </div>
+          <div class="live-bar-row">
+            <span class="lbar-label">🐱 고양이상</span>
+            <div class="lbar-track"><div class="lbar-fill cat-fill" id="bar-cat"></div></div>
+            <span class="lbar-pct" id="pct-cat">0%</span>
           </div>
         </div>
-        <div class="form-group">
-          <label for="subject">문의 유형</label>
-          <select id="subject" name="subject">
-            <option value="광고 제휴">📢 광고 제휴</option>
-            <option value="서비스 협력">🤝 서비스 협력</option>
-            <option value="콘텐츠 제안">📝 콘텐츠 제안</option>
-            <option value="기타">💬 기타 문의</option>
-          </select>
+        <div class="upload-actions">
+          <button class="action-btn secondary" onclick="stopWebcam()">← 돌아가기</button>
+          <button class="action-btn primary" id="lock-btn" onclick="lockWebcamResult()" disabled>
+            ✅ 결과 확정
+          </button>
         </div>
-        <div class="form-group">
-          <label for="message">문의 내용 <span class="required">*</span></label>
-          <textarea id="message" name="message" rows="4" placeholder="문의 내용을 자유롭게 입력해주세요." required></textarea>
+      </div>
+    </section>
+
+    <!-- ④ 분석 중 화면 -->
+    <section id="screen-analyzing" class="screen">
+      <div class="analyzing-card">
+        <div class="analyzing-anim">
+          <span class="scan-emoji">🔍</span>
+          <div class="scan-ring"></div>
         </div>
-        <button type="submit" class="submit-btn">
-          <span class="submit-icon">🚀</span>
-          <span>문의 보내기</span>
+        <p class="analyzing-text">AI가 분석 중입니다...</p>
+        <div class="analyzing-dots"><span></span><span></span><span></span></div>
+      </div>
+    </section>
+
+    <!-- ⑤ 결과 화면 -->
+    <section id="screen-result" class="screen">
+      <div class="result-card" id="result-card">
+        <div class="result-badge" id="result-badge"></div>
+        <div class="result-emoji" id="result-emoji"></div>
+        <h2 class="result-title" id="result-title"></h2>
+        <p class="result-sub" id="result-sub"></p>
+
+        <div class="result-bars">
+          <div class="result-bar-row">
+            <span class="rbar-label">🐶 강아지상</span>
+            <div class="rbar-track">
+              <div class="rbar-fill dog-fill" id="rbar-dog"></div>
+            </div>
+            <span class="rbar-pct" id="rpct-dog"></span>
+          </div>
+          <div class="result-bar-row">
+            <span class="rbar-label">🐱 고양이상</span>
+            <div class="rbar-track">
+              <div class="rbar-fill cat-fill" id="rbar-cat"></div>
+            </div>
+            <span class="rbar-pct" id="rpct-cat"></span>
+          </div>
+        </div>
+
+        <div class="result-traits" id="result-traits"></div>
+        <p class="result-desc" id="result-desc"></p>
+
+        <button class="action-btn primary" style="width:100%;margin-top:24px" onclick="resetTest()">
+          🔄 다시 테스트하기
         </button>
-      </form>
-
-      <div id="form-success" class="form-success hidden">
-        <span class="success-icon">✅</span>
-        <p>문의가 성공적으로 접수되었습니다!<br>빠른 시일 내에 답변드리겠습니다.</p>
       </div>
     </section>
 
   </main>
 
-  <!-- 푸터 -->
+  <!-- 제휴 문의 -->
+  <section class="contact-outer">
+    <div class="container">
+      <div class="contact-section">
+        <div class="contact-header">
+          <span class="contact-badge">📬 PARTNERSHIP</span>
+          <h2 class="contact-title">제휴 문의</h2>
+          <p class="contact-desc">광고·제휴·협력 제안을 남겨주시면 빠르게 답변드립니다.</p>
+        </div>
+        <form id="contact-form" action="https://formspree.io/f/mojnkzvy" method="POST" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">이름 / 회사명 <span class="required">*</span></label>
+              <input type="text" id="name" name="name" placeholder="홍길동 / (주)럭키컴퍼니" required />
+            </div>
+            <div class="form-group">
+              <label for="email">이메일 <span class="required">*</span></label>
+              <input type="email" id="email" name="email" placeholder="example@company.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="subject">문의 유형</label>
+            <select id="subject" name="subject">
+              <option value="광고 제휴">📢 광고 제휴</option>
+              <option value="서비스 협력">🤝 서비스 협력</option>
+              <option value="콘텐츠 제안">📝 콘텐츠 제안</option>
+              <option value="기타">💬 기타 문의</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">문의 내용 <span class="required">*</span></label>
+            <textarea id="message" name="message" rows="4" placeholder="문의 내용을 자유롭게 입력해주세요." required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">
+            <span class="submit-icon">🚀</span>
+            <span>문의 보내기</span>
+          </button>
+        </form>
+        <div id="form-success" class="form-success hidden">
+          <span class="success-icon">✅</span>
+          <p>문의가 성공적으로 접수되었습니다!<br>빠른 시일 내에 답변드리겠습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="site-footer">
-    <p>© 2026 Lucky Lotto · 행운을 빕니다 🍀</p>
+    <p>© 2026 동물상 테스트 · AI 기반 재미 테스트 🐾</p>
   </footer>
 
-  <script defer type="text/javascript" src="/main.js"></script>
+  <!-- TensorFlow & Teachable Machine -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+  <script src="/main.js"></script>
 </body>
 </html>
