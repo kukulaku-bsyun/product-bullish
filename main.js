@@ -1,3 +1,21 @@
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('theme-toggle');
+  const isDark = body.classList.toggle('dark');
+  btn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+(function () {
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    document.addEventListener('DOMContentLoaded', function () {
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = '☀️ Light Mode';
+    });
+  }
+})();
+
 function recommendLottoNumbers() {
   const numbers = new Set();
   while (numbers.size < 6) {
