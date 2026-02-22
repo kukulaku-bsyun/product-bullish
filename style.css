@@ -92,12 +92,44 @@ body {
   50%      { transform: translateY(-16px) rotate(12deg); }
 }
 
+/* ===== 탭 네비게이션 ===== */
+.tab-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.tab-nav-inner {
+  max-width: 780px; margin: 0 auto;
+  display: flex; gap: 4px; padding: 10px 16px;
+}
+.tab-btn {
+  flex: 1; padding: 10px 20px;
+  background: transparent; border: none;
+  border-radius: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--text-sub); cursor: pointer;
+  transition: all 0.2s;
+}
+.tab-btn:hover { background: var(--surface2); color: var(--text); }
+.tab-btn.active {
+  background: var(--toggle-bg);
+  color: var(--accent);
+}
+
+/* ===== 탭 패널 ===== */
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
 /* ===== 컨테이너 ===== */
 .container {
-  max-width: 560px; width: 100%;
+  width: 100%;
   margin: 0 auto; padding: 36px 16px 48px;
   flex: 1;
 }
+.container--narrow { max-width: 560px; }
+.container--wide   { max-width: 780px; }
 
 /* ===== 화면 전환 ===== */
 .screen { display: none; animation: fadeUp 0.4s ease both; }
@@ -379,6 +411,151 @@ body.dark .result-badge.cat { background: #2e1f6e; color: #c4b5fd; }
   background: var(--surface2);
 }
 
+/* =====================================================
+   로또 번호 추천 스타일
+   ===================================================== */
+
+/* 인포 배너 */
+.info-banner {
+  display: flex; justify-content: center;
+  gap: 12px; flex-wrap: wrap; margin-bottom: 32px;
+}
+.info-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 50px; padding: 8px 20px;
+  font-size: 13px; font-weight: 600; color: var(--text-sub);
+  box-shadow: 0 2px 12px rgba(79,70,229,0.06);
+}
+.info-item strong { color: var(--accent); }
+
+/* 추천 버튼 */
+.generate-wrap { display: flex; justify-content: center; margin-bottom: 36px; }
+.generate-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 18px 48px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #fff; border: none; border-radius: 60px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 18px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 8px 32px rgba(79,70,229,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: 1px;
+}
+.generate-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(79,70,229,0.4); }
+.generate-btn:active { transform: translateY(0); }
+.generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-icon { font-size: 24px; }
+
+/* 결과 그리드 */
+.results-grid { display: flex; flex-direction: column; gap: 16px; }
+
+/* 로또 카드 */
+.lotto-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 20px 24px;
+  box-shadow: 0 4px 24px rgba(79,70,229,0.08);
+  display: flex; align-items: center; gap: 16px;
+  animation: lottoSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: background 0.3s, border 0.3s;
+  overflow: hidden; position: relative;
+}
+.lotto-card::after {
+  content: '';
+  position: absolute; top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+  animation: shimmerSweep 0.7s ease both;
+  animation-delay: var(--card-delay, 0ms);
+}
+.lotto-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(79,70,229,0.14);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+@keyframes lottoSlideIn {
+  from { opacity: 0; transform: translateX(-28px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes shimmerSweep {
+  0%   { left: -100%; opacity: 0; }
+  30%  { opacity: 1; }
+  100% { left: 160%; opacity: 0; }
+}
+
+.card-game { min-width: 60px; text-align: center; }
+.game-label { font-size: 11px; font-weight: 600; color: var(--text-sub); letter-spacing: 1px; text-transform: uppercase; }
+.game-num   { font-size: 22px; font-weight: 900; color: var(--accent); line-height: 1.2; }
+.card-divider { width: 1px; height: 48px; background: var(--border); flex-shrink: 0; }
+.card-numbers { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1; }
+.bonus-sep { font-size: 18px; color: var(--text-sub); font-weight: 300; margin: 0 2px; }
+
+/* 번호 볼 */
+.ball {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700; color: #fff;
+  box-shadow: inset 0 -3px 6px rgba(0,0,0,0.2), 0 2px 6px rgba(0,0,0,0.15);
+  position: relative; flex-shrink: 0;
+}
+.ball::after {
+  content: '';
+  position: absolute; top: 6px; left: 10px;
+  width: 12px; height: 6px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 50%; transform: rotate(-30deg);
+}
+.ball.range-1  { background: radial-gradient(circle at 40% 35%, #fdd835, #f9a825); }
+.ball.range-11 { background: radial-gradient(circle at 40% 35%, #42b0e8, #1976d2); }
+.ball.range-21 { background: radial-gradient(circle at 40% 35%, #ef5350, #c62828); }
+.ball.range-31 { background: radial-gradient(circle at 40% 35%, #9e9e9e, #616161); }
+.ball.range-41 { background: radial-gradient(circle at 40% 35%, #aed940, #689f38); }
+.ball.bonus {
+  box-shadow: 0 0 0 2.5px #f59e0b, inset 0 -3px 6px rgba(0,0,0,0.2);
+}
+.ball.bonus::before {
+  content: '★'; position: absolute; top: -10px; left: 50%;
+  transform: translateX(-50%); font-size: 10px; color: #f59e0b;
+}
+
+/* 볼 애니메이션 */
+.generate-btn.btn-clicked { animation: btnPress 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+.generate-btn.btn-clicked .btn-icon { animation: iconBounce 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+@keyframes btnPress {
+  0%  { transform: scale(1); }
+  25% { transform: scale(0.93) translateY(2px); }
+  60% { transform: scale(1.05) translateY(-2px); }
+  100%{ transform: scale(1); }
+}
+@keyframes iconBounce {
+  0%  { transform: rotate(0deg)   scale(1); }
+  30% { transform: rotate(-20deg) scale(0.85); }
+  60% { transform: rotate(25deg)  scale(1.3); }
+  80% { transform: rotate(-8deg)  scale(1.1); }
+  100%{ transform: rotate(0deg)   scale(1); }
+}
+.ball.ball-rolling { animation: ballRoll 0.09s linear infinite; filter: blur(0.8px); opacity: 0.85; }
+@keyframes ballRoll {
+  0%  { transform: scale(0.92) rotate(-5deg); }
+  50% { transform: scale(1.06) rotate(5deg); }
+  100%{ transform: scale(0.92) rotate(-5deg); }
+}
+.ball.ball-reveal { animation: ballPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.4) both; }
+@keyframes ballPop {
+  0%  { transform: scale(0.2) rotate(-15deg); opacity: 0.4; filter: blur(2px); }
+  55% { transform: scale(1.3)  rotate(6deg);  opacity: 1;   filter: blur(0); }
+  75% { transform: scale(0.92) rotate(-3deg); }
+  100%{ transform: scale(1)    rotate(0deg); }
+}
+.ball.ball-bonus-glow { animation: bonusGlow 0.8s ease both; }
+@keyframes bonusGlow {
+  0%  { box-shadow: 0 0 0 2.5px #f59e0b, 0 0 0px  rgba(245,158,11,0); }
+  45% { box-shadow: 0 0 0 4px   #f59e0b, 0 0 22px rgba(245,158,11,0.7); }
+  100%{ box-shadow: 0 0 0 2.5px #f59e0b, 0 0 10px rgba(245,158,11,0.35); }
+}
+
+/* 공지 */
+.notice { margin-top: 36px; text-align: center; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
+
 /* ===== 반응형 ===== */
 @media (max-width: 520px) {
   .start-card, .upload-card, .webcam-card, .result-card { padding: 28px 18px; }
@@ -387,4 +564,10 @@ body.dark .result-badge.cat { background: #2e1f6e; color: #c4b5fd; }
   .form-row { grid-template-columns: 1fr; }
   .contact-section { padding: 24px 18px; }
   .upload-actions { flex-direction: column; }
+  .lotto-card { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .card-divider { width: 100%; height: 1px; }
+  .card-game { display: flex; gap: 8px; align-items: baseline; }
+  .generate-btn { padding: 16px 36px; font-size: 16px; }
+  .ball { width: 36px; height: 36px; font-size: 13px; }
+  .tab-btn { font-size: 13px; padding: 9px 12px; }
 }

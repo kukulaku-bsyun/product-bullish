@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🐾 동물상 테스트 | 나는 강아지상? 고양이상?</title>
+  <title>✨ AI 플레이 | 동물상 테스트 · 로또 번호 추천</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -16,18 +16,32 @@
   <!-- 헤더 -->
   <header class="site-header">
     <div class="header-inner">
-      <div class="logo">🐾 동물상 테스트</div>
-      <p class="subtitle">AI가 분석하는 나의 동물상 · 강아지상 vs 고양이상</p>
+      <div class="logo">✨ AI 플레이그라운드</div>
+      <p class="subtitle">동물상 테스트 · 로또 번호 추천 · AI 기반 재미 서비스</p>
     </div>
     <div class="header-deco">
       <span class="hdeco">🐶</span>
+      <span class="hdeco">🍀</span>
       <span class="hdeco">🐱</span>
-      <span class="hdeco">🐾</span>
-      <span class="hdeco">✨</span>
+      <span class="hdeco">🎰</span>
     </div>
   </header>
 
-  <main class="container">
+  <!-- 탭 네비게이션 -->
+  <nav class="tab-nav">
+    <div class="tab-nav-inner">
+      <button class="tab-btn active" onclick="switchTab('animal')">
+        🐾 동물상 테스트
+      </button>
+      <button class="tab-btn" onclick="switchTab('lotto')">
+        🍀 로또 번호 추천
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== 동물상 탭 ===== -->
+  <div id="tab-animal" class="tab-pane active">
+  <main class="container container--narrow">
 
     <!-- ① 시작 화면 -->
     <section id="screen-start" class="screen active">
@@ -156,6 +170,33 @@
     </section>
 
   </main>
+  </div><!-- /tab-animal -->
+
+  <!-- ===== 로또 탭 ===== -->
+  <div id="tab-lotto" class="tab-pane">
+  <main class="container container--wide">
+
+    <section class="info-banner">
+      <div class="info-item">🎱 <strong>1~45</strong> 번호</div>
+      <div class="info-item">🎯 <strong>5게임</strong> 자동 추천</div>
+      <div class="info-item">⭐ <strong>보너스</strong> 번호 포함</div>
+    </section>
+
+    <div class="generate-wrap">
+      <button class="generate-btn" onclick="generateAll()">
+        <span class="btn-icon">🎰</span>
+        <span class="btn-text">번호 추천받기</span>
+      </button>
+    </div>
+
+    <div id="lotto-results" class="results-grid"></div>
+
+    <section class="notice">
+      <p>⚠️ 본 서비스는 재미를 위한 무작위 번호 생성 서비스입니다. 당첨을 보장하지 않습니다.</p>
+    </section>
+
+  </main>
+  </div><!-- /tab-lotto -->
 
   <!-- 제휴 문의 -->
   <section class="contact-outer">
@@ -204,7 +245,7 @@
   </section>
 
   <footer class="site-footer">
-    <p>© 2026 동물상 테스트 · AI 기반 재미 테스트 🐾</p>
+    <p>© 2026 AI 플레이그라운드 · 동물상 테스트 & 로또 번호 추천 ✨</p>
   </footer>
 
   <!-- TensorFlow & Teachable Machine -->

@@ -31,6 +31,16 @@ const RESULTS = {
   },
 };
 
+/* ===== 탭 전환 ===== */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab-btn[onclick="switchTab('${tab}')"]`).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  // 로또 탭으로 이동 시 웹캠 정지
+  if (tab !== 'animal' && webcamLoop) stopWebcam();
+}
+
 /* ===== 화면 전환 ===== */
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -251,6 +261,115 @@ function resetTest() {
   document.getElementById('analyze-btn').disabled = true;
   lastPrediction = null;
   showScreen('screen-start');
+}
+
+/* =====================================================
+   로또 번호 추천
+   ===================================================== */
+
+function getBallRange(n) {
+  if (n <= 10) return 'range-1';
+  if (n <= 20) return 'range-11';
+  if (n <= 30) return 'range-21';
+  if (n <= 40) return 'range-31';
+  return 'range-41';
+}
+
+function generateGame() {
+  const pool = Array.from({ length: 45 }, (_, i) => i + 1);
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return { main: pool.slice(0, 6).sort((a, b) => a - b), bonus: pool[6] };
+}
+
+function createBallEl(number, isBonus = false) {
+  const el = document.createElement('span');
+  el.className = 'ball ' + getBallRange(number) + (isBonus ? ' bonus' : '');
+  el.dataset.final = number;
+  el.textContent = '?';
+  return el;
+}
+
+function animateBall(ball, delay, isBonus) {
+  const final = parseInt(ball.dataset.final);
+  setTimeout(() => {
+    ball.classList.add('ball-rolling');
+    const interval = setInterval(() => {
+      ball.textContent = Math.floor(Math.random() * 45) + 1;
+    }, 55);
+    setTimeout(() => {
+      clearInterval(interval);
+      ball.classList.remove('ball-rolling');
+      ball.textContent = final;
+      ball.classList.add('ball-reveal');
+      if (isBonus) setTimeout(() => ball.classList.add('ball-bonus-glow'), 180);
+    }, 380);
+  }, delay);
+}
+
+let _generating = false;
+
+function generateAll() {
+  if (_generating) return;
+  _generating = true;
+
+  const container = document.getElementById('lotto-results');
+  container.innerHTML = '';
+
+  const btn = document.querySelector('.generate-btn');
+  btn.disabled = true;
+  btn.classList.remove('btn-clicked');
+  void btn.offsetWidth;
+  btn.classList.add('btn-clicked');
+  setTimeout(() => btn.classList.remove('btn-clicked'), 400);
+
+  const CARD_STAGGER = 190;
+  const BALL_STAGGER = 120;
+  const totalDuration = 4 * CARD_STAGGER + 6 * BALL_STAGGER + 380 + 200;
+  setTimeout(() => { btn.disabled = false; _generating = false; }, totalDuration);
+
+  for (let i = 0; i < 5; i++) {
+    const { main, bonus } = generateGame();
+    const cardDelay = i * CARD_STAGGER;
+
+    const card = document.createElement('div');
+    card.className = 'lotto-card';
+    card.style.animationDelay = `${cardDelay}ms`;
+    card.style.animationFillMode = 'both';
+    card.style.setProperty('--card-delay', `${cardDelay}ms`);
+
+    const gameDiv = document.createElement('div');
+    gameDiv.className = 'card-game';
+    gameDiv.innerHTML = `<div class="game-label">GAME</div><div class="game-num">${i + 1}</div>`;
+
+    const divider = document.createElement('div');
+    divider.className = 'card-divider';
+
+    const numbersDiv = document.createElement('div');
+    numbersDiv.className = 'card-numbers';
+
+    main.forEach((n, bi) => {
+      const ball = createBallEl(n, false);
+      numbersDiv.appendChild(ball);
+      animateBall(ball, cardDelay + bi * BALL_STAGGER, false);
+    });
+
+    const sep = document.createElement('span');
+    sep.className = 'bonus-sep';
+    sep.textContent = '+';
+    numbersDiv.appendChild(sep);
+
+    const bonusBall = createBallEl(bonus, true);
+    numbersDiv.appendChild(bonusBall);
+    animateBall(bonusBall, cardDelay + 6 * BALL_STAGGER, true);
+
+    card.appendChild(gameDiv);
+    card.appendChild(divider);
+    card.appendChild(numbersDiv);
+    container.appendChild(card);
+  }
 }
 
 /* ===== 제휴 문의 폼 ===== */
