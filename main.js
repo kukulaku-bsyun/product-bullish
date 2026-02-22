@@ -5,6 +5,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
+
+    // 클라이언트 유효성 검사
+    const name    = form.querySelector('#name').value.trim();
+    const email   = form.querySelector('#email').value.trim();
+    const message = form.querySelector('#message').value.trim();
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name) {
+      alert('이름 또는 회사명을 입력해주세요.');
+      form.querySelector('#name').focus();
+      return;
+    }
+    if (!email || !emailRe.test(email)) {
+      alert('올바른 이메일 주소를 입력해주세요.');
+      form.querySelector('#email').focus();
+      return;
+    }
+    if (!message) {
+      alert('문의 내용을 입력해주세요.');
+      form.querySelector('#message').focus();
+      return;
+    }
+
     const btn = form.querySelector('.submit-btn');
     btn.disabled = true;
     btn.innerHTML = '<span>전송 중...</span>';
@@ -106,19 +129,31 @@ function animateBall(ball, delay, isBonus) {
 }
 
 /* ===== 5게임 전체 생성 ===== */
+let _generating = false;
+
 function generateAll() {
+  if (_generating) return; // 연타 클릭 방지
+  _generating = true;
+
   const container = document.getElementById('results');
   container.innerHTML = '';
 
-  // 버튼 클릭 애니메이션
+  // 버튼 클릭 애니메이션 + 비활성화
   const btn = document.querySelector('.generate-btn');
+  btn.disabled = true;
   btn.classList.remove('btn-clicked');
-  void btn.offsetWidth; // reflow로 애니메이션 재시작
+  void btn.offsetWidth;
   btn.classList.add('btn-clicked');
   setTimeout(() => btn.classList.remove('btn-clicked'), 400);
 
   const CARD_STAGGER  = 190;  // 카드 간 딜레이 (ms)
   const BALL_STAGGER  = 120;  // 볼 간 딜레이 (ms)
+  // 마지막 볼 완료 후 버튼 재활성화 (카드4 * 190 + 볼6 * 120 + 롤링380 + 여유)
+  const totalDuration = 4 * CARD_STAGGER + 6 * BALL_STAGGER + 380 + 200;
+  setTimeout(() => {
+    btn.disabled = false;
+    _generating = false;
+  }, totalDuration);
 
   for (let i = 0; i < 5; i++) {
     const { main, bonus } = generateGame();
@@ -128,6 +163,7 @@ function generateAll() {
     card.className = 'lotto-card';
     card.style.animationDelay = `${cardDelay}ms`;
     card.style.animationFillMode = 'both';
+    card.style.setProperty('--card-delay', `${cardDelay}ms`); // shimmer 동기화
 
     const gameDiv = document.createElement('div');
     gameDiv.className = 'card-game';
